@@ -1,0 +1,170 @@
+/* ==========================================================================
+   SafaCycle Waste Expert chatbot. All selectors are prefixed "scx-" so they
+   cannot affect existing site styles. Colours reuse the site's variables.
+   ========================================================================== */
+
+.scx-fab {
+  position: fixed; z-index: 57; right: 24px; bottom: 24px;
+  display: inline-flex; align-items: center; gap: 8px; height: 52px; padding: 0 18px 0 14px;
+  border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--lime, #A3E635); color: var(--forest, #123D32);
+  font: 800 .95rem/1 var(--font, system-ui, sans-serif);
+  box-shadow: 0 10px 28px rgba(12, 43, 35, .3);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.scx-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(12, 43, 35, .35); }
+.scx-fab:focus-visible, .scx-panel :focus-visible { outline: 3px solid var(--green, #2F855A); outline-offset: 2px; }
+.scx-icon { width: 20px; height: 20px; flex: none; }
+
+.scx-panel {
+  position: fixed; z-index: 95; right: 24px; bottom: 24px;
+  width: min(420px, calc(100vw - 48px)); height: min(680px, calc(100dvh - 48px));
+  display: flex; flex-direction: column; overflow: hidden; overflow: clip;  /* clip: the panel itself can never be scrolled */
+  background: var(--white, #fff); color: var(--ink, #1F2933);
+  border: 1px solid var(--line, #DCE3DE); border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(12, 43, 35, .22);
+  font-family: var(--font, system-ui, sans-serif);
+  animation: scxIn .25s ease;
+}
+.scx-panel[hidden] { display: none; }
+.scx-panel--min { height: auto; }
+@keyframes scxIn { from { opacity: 0; transform: translateY(12px); } }
+
+.scx-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 12px 12px 16px; background: var(--forest, #123D32); color: #fff; }
+.scx-title { margin: 0; font-size: 1.02rem; font-weight: 800; color: #fff; }
+.scx-badge { margin: 2px 0 0; font-size: .72rem; font-weight: 700; color: var(--lime, #A3E635); letter-spacing: .02em; }
+.scx-conn { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: .72rem; font-weight: 800; padding: 2px 9px 2px 7px; border-radius: 999px; background: rgba(255, 255, 255, .12); color: #fff; }
+.scx-conn::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #C9D2CC; }
+.scx-conn--online::before { background: #4ADE80; }
+.scx-conn--offline::before { background: #F87171; }
+.scx-conn--checking::before { background: #FBBF24; }
+.scx-head__actions { display: flex; gap: 4px; }
+.scx-iconbtn {
+  width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .25); background: transparent; color: #fff;
+}
+.scx-iconbtn:hover { background: rgba(255, 255, 255, .12); }
+.scx-iconbtn .scx-icon { width: 18px; height: 18px; }
+
+.scx-body { display: flex; flex-direction: column; flex: 1 1 0; min-height: 0; }
+.scx-head { flex: none; }
+.scx-body[hidden] { display: none; }
+.scx-status { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 14px; font-size: .82rem; font-weight: 600; }
+.scx-status--info { background: var(--mist, #EEF2EF); color: var(--ink-2, #3E4C59); }
+.scx-status--error { background: #FDECEA; color: #8F1D14; }
+.scx-link { background: none; border: 0; padding: 4px; color: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; }
+
+.scx-log { flex: 1 1 0; min-height: 0; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; background: var(--cream, #F8F5EC); overscroll-behavior: contain; }
+.scx-msg { max-width: 92%; border-radius: 16px; padding: 10px 13px; font-size: .92rem; line-height: 1.5; }
+.scx-msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.scx-msg--user { align-self: flex-end; background: var(--forest, #123D32); color: #fff; border-bottom-right-radius: 4px; }
+.scx-msg--bot { align-self: flex-start; background: #fff; border: 1px solid var(--line, #DCE3DE); border-bottom-left-radius: 4px; }
+.scx-typing { display: inline-flex; gap: 4px; align-items: center; padding: 12px 14px; }
+.scx-typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--muted, #5B6770); animation: scxBlink 1.2s infinite; }
+.scx-typing span:nth-child(2) { animation-delay: .2s; }
+.scx-typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes scxBlink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+
+.scx-card { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line, #DCE3DE); display: grid; gap: 8px; }
+.scx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.scx-chip { font-size: .72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--mist, #EEF2EF); color: var(--forest, #123D32); }
+.scx-chip--cat { background: var(--forest, #123D32); color: var(--lime, #A3E635); }
+.scx-chip--high { background: #DCF5C4; }
+.scx-chip--moderate { background: #FEF3C7; color: #7A4400; }
+.scx-chip--low { background: #FDECEA; color: #8F1D14; }
+.scx-attrs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin: 0; font-size: .78rem; }
+.scx-attrs div { display: flex; justify-content: space-between; gap: 6px; border-bottom: 1px solid var(--mist, #EEF2EF); padding: 2px 0; }
+.scx-attrs dt { color: var(--muted, #5B6770); }
+.scx-attrs dd { margin: 0; font-weight: 700; text-align: right; }
+.scx-warning { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: #FEF3C7; color: #5C3300; border: 1px solid #F8D38A; font-size: .82rem; }
+.scx-warning .scx-icon { width: 18px; height: 18px; margin-top: 1px; }
+.scx-warning p { margin: 0; }
+
+.scx-examples { flex: none; padding: 8px 12px 0; border-top: 1px solid var(--line, #DCE3DE); }
+.scx-examples[hidden] { display: none; }
+.scx-examples__label { margin: 0 0 6px; font-size: .74rem; color: var(--muted, #5B6770); }
+.scx-examples__list { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }
+.scx-example { flex: none; max-width: 240px; white-space: normal; text-align: left; font-size: .76rem; padding: 6px 10px; border-radius: 12px; border: 1px solid var(--line, #DCE3DE); background: var(--white, #fff); color: var(--ink-2, #3E4C59); cursor: pointer; }
+.scx-example:hover { border-color: var(--green, #2F855A); }
+
+.scx-form { flex: none; display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px 4px; border-top: 1px solid var(--line, #DCE3DE); }
+.scx-input {
+  flex: 1; resize: none; overflow-y: hidden; min-height: 44px; max-height: 120px; padding: 11px 12px; border-radius: 12px;
+  border: 1.5px solid var(--line, #DCE3DE); font: inherit; font-size: .95rem; color: inherit; background: #fff;
+}
+.scx-input:focus { border-color: var(--green, #2F855A); outline: none; box-shadow: 0 0 0 3px rgba(47, 133, 90, .2); }
+.scx-send { width: 44px; height: 44px; flex: none; display: grid; place-items: center; border: 0; border-radius: 12px; background: var(--green, #2F855A); color: #fff; cursor: pointer; }
+.scx-send:hover { background: var(--forest, #123D32); }
+.scx-send:disabled { opacity: .5; cursor: wait; }
+.scx-foot { margin: 0; padding: 2px 14px 10px; font-size: .7rem; color: var(--muted, #5B6770); }
+
+.scx-feedback { align-self: stretch; background: #fff; border: 1.5px solid var(--green, #2F855A); border-radius: 14px; padding: 12px; display: grid; gap: 8px; font-size: .85rem; }
+.scx-feedback h3 { margin: 0; font-size: .92rem; color: var(--forest, #123D32); }
+.scx-feedback fieldset { border: 0; padding: 0; margin: 0; }
+.scx-feedback legend { font-size: .76rem; font-weight: 700; color: var(--muted, #5B6770); margin-bottom: 4px; }
+/* Hidden inputs and screen-reader text must stay inside these boxes; otherwise focusing
+   them scrolls the whole panel and it turns blank. */
+.scx-msg, .scx-feedback, .scx-stars, .scx-helpful label, .scx-card { position: relative; }
+.scx-stars { display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; gap: 2px; }
+.scx-stars input { position: absolute; top: 0; left: 0; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.scx-stars label { font-size: 1.6rem; line-height: 1; color: #C9D2CC; cursor: pointer; padding: 4px 2px; min-width: 32px; text-align: center; }
+.scx-stars input:checked ~ label, .scx-stars label:hover, .scx-stars label:hover ~ label { color: #E0A106; }
+.scx-stars input:focus-visible + label { outline: 3px solid var(--green, #2F855A); border-radius: 6px; }
+.scx-helpful { display: flex; gap: 14px; flex-wrap: wrap; }
+.scx-helpful label { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; cursor: pointer; }
+.scx-helpful input { width: 18px; height: 18px; accent-color: var(--green, #2F855A); }
+.scx-comment { width: 100%; resize: vertical; border-radius: 10px; border: 1.5px solid var(--line, #DCE3DE); padding: 8px 10px; font: inherit; font-size: .85rem; box-sizing: border-box; }
+.scx-fb-submit { justify-self: start; min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--forest, #123D32); color: #fff; font-weight: 800; cursor: pointer; }
+.scx-fb-submit:disabled { opacity: .6; cursor: wait; }
+.scx-fb-msg { margin: 0; font-size: .8rem; }
+.scx-fb-msg--error { color: #8F1D14; font-weight: 700; }
+.scx-fb-thanks { margin: 0; font-weight: 700; color: var(--forest, #123D32); }
+.scx-fb-thanks--partial { color: #7A4400; }
+
+.scx-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* "Would you like to rate this chat?" prompt */
+.scx-rate-prompt {
+  align-self: stretch; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px;
+  padding: 10px 12px; border-radius: 14px; background: #fff; border: 1px dashed var(--green, #2F855A); font-size: .88rem;
+}
+.scx-rate-prompt p { margin: 0; font-weight: 700; color: var(--forest, #123D32); }
+.scx-rate-prompt__actions { display: flex; gap: 6px; }
+.scx-rate-yes, .scx-rate-no { min-height: 36px; padding: 0 14px; border-radius: 999px; font-weight: 800; font-size: .82rem; cursor: pointer; }
+.scx-rate-yes { border: 0; background: var(--green, #2F855A); color: #fff; }
+.scx-rate-yes:hover { background: var(--forest, #123D32); }
+.scx-rate-no { border: 1.5px solid var(--line, #DCE3DE); background: transparent; color: var(--ink-2, #3E4C59); }
+.scx-rate-no:hover { background: var(--mist, #EEF2EF); }
+
+/* Backend-not-connected state */
+.scx-fab--offline::after {
+  content: ""; position: absolute; top: 4px; right: 6px; width: 12px; height: 12px; border-radius: 50%;
+  background: #D92D20; border: 2px solid #fff;
+}
+.scx-offline {
+  align-self: stretch; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px;
+  background: #FDECEA; border: 1.5px solid #F4B4AE; color: #7A1B12; font-size: .9rem;
+}
+.scx-offline .scx-icon { width: 20px; height: 20px; }
+.scx-offline strong { flex: 1; }
+.scx-retry { min-height: 34px; padding: 0 14px; border: 0; border-radius: 999px; background: #7A1B12; color: #fff; font-weight: 800; cursor: pointer; }
+.scx-retry:hover { background: #5C140D; }
+.scx-input:disabled { background: var(--mist, #EEF2EF); cursor: not-allowed; }
+.scx-send:disabled { cursor: not-allowed; }
+.scx-example:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Tablets and phones: the site shows a bottom action bar and its own assistant button */
+@media (max-width: 1023px) {
+  .scx-fab { right: 16px; bottom: calc(64px + 16px + env(safe-area-inset-bottom)); }
+}
+@media (max-width: 639px) {
+  .scx-fab { right: 12px; bottom: calc(64px + 12px + env(safe-area-inset-bottom)); width: 52px; padding: 0; justify-content: center; }
+  .scx-fab__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .scx-panel { left: 8px; right: 8px; bottom: calc(8px + env(safe-area-inset-bottom)); width: auto; height: calc(100dvh - 16px); border-radius: 18px; }
+  .scx-msg { max-width: 96%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scx-panel, .scx-typing span { animation: none; }
+  .scx-fab { transition: none; }
+}
+@media print { .scx-fab, .scx-panel { display: none !important; } }
